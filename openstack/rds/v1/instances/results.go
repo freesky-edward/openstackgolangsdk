@@ -88,7 +88,7 @@ type CreateResult struct {
 }
 
 type DeleteResult struct {
-	commonResult
+	gophercloud.ErrResult
 }
 
 type GetResult struct {
