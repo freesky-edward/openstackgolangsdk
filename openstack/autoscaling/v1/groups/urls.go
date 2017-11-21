@@ -15,3 +15,7 @@ func deleteGroupUrl(c *gophercloud.ServiceClient, id string) string {
 func getGroupUrl(c *gophercloud.ServiceClient, id string) string {
 	return c.ServiceURL("scaling_group", id)
 }
+
+func listGroupUrl(c *gophercloud.ServiceClient) string {
+	return c.ServiceURL("scaling_group")
+}

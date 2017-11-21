@@ -28,6 +28,20 @@ func main() {
 
 	sc, _ := openstack.NewAutoScalingService(client, eo)
 
+	page, err := groups.List(sc, groups.ListOps{}).AllPages()
+	if err != nil {
+		return
+	}
+
+	gs, err := page.(groups.GroupPage).Extract()
+	if err != nil {
+		return
+	}
+
+	for _, group := range gs {
+		fmt.Println(group.GroupName)
+	}
+
 	g, err := groups.Create(sc, groups.CreateGroupOps{GroupName: "", Networks: nil, SecurityGroup: nil, VpcID: ""}).Extract()
 
 	if err != nil {

@@ -2,6 +2,7 @@ package groups
 
 import (
 	"github.com/gophercloud/gophercloud"
+	"github.com/gophercloud/gophercloud/pagination"
 )
 
 type HealthCheckMethod string
@@ -75,4 +76,35 @@ func Delete(client *gophercloud.ServiceClient, id string) (r DeleteGroupResult) 
 func Get(client *gophercloud.ServiceClient, id string) (r GetGroupResult) {
 	_, r.Err = client.Get(getGroupUrl(client, id), &r.Body, nil)
 	return
+}
+
+type ListOpsBuilder interface {
+	ToGroupListQuery() (string, error)
+}
+
+type ListOps struct {
+	GroupName       string `q:"scaling_group_name"`
+	ConfigurationID string `q:"scaling_configuration_id"`
+	GroupStatus     string `q:"scaling_group_status"`
+}
+
+// ToGroupListQuery formats a ListOpts into a query string.
+func (opts ListOps) ToGroupListQuery() (string, error) {
+	q, err := gophercloud.BuildQueryString(opts)
+	return q.String(), err
+}
+
+func List(client *gophercloud.ServiceClient, ops ListOpsBuilder) pagination.Pager {
+	url := listGroupUrl(client)
+	if ops != nil {
+		q, err := ops.ToGroupListQuery()
+		if err != nil {
+			return pagination.Pager{Err: err}
+		}
+		url += q
+	}
+
+	return pagination.NewPager(client, url, func(r pagination.PageResult) pagination.Page {
+		return GroupPage{pagination.SinglePageBase(r)}
+	})
 }

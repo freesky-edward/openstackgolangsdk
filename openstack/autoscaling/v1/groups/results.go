@@ -2,6 +2,7 @@ package groups
 
 import (
 	"github.com/gophercloud/gophercloud"
+	"github.com/gophercloud/gophercloud/pagination"
 )
 
 //CreateGroupResult is a struct retured by CreateGroup request
@@ -70,4 +71,20 @@ type Network struct {
 
 type SecurityGroup struct {
 	ID string `json:"id"`
+}
+
+type GroupPage struct {
+	pagination.SinglePageBase
+}
+
+// IsEmpty returns true if a ListResult contains no Volumes.
+func (r GroupPage) IsEmpty() (bool, error) {
+	groups, err := r.Extract()
+	return len(groups) == 0, err
+}
+
+func (r GroupPage) Extract() ([]Group, error) {
+	var gs []Group
+	err := r.Result.ExtractIntoSlicePtr(gs, "scaling_groups")
+	return gs, err
 }
