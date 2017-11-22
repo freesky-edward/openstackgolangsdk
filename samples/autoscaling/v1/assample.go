@@ -5,6 +5,7 @@ import (
 
 	"github.com/gophercloud/gophercloud"
 	"github.com/gophercloud/gophercloud/openstack"
+	"github.com/gophercloud/gophercloud/openstack/autoscaling/v1/configurations"
 	"github.com/gophercloud/gophercloud/openstack/autoscaling/v1/groups"
 )
 
@@ -50,4 +51,10 @@ func main() {
 	fmt.Println(g)
 
 	//TODO deal with the instance object
+
+	id, err := configurations.Create(sc, configurations.CreateConfigurationOpts{Name: "hello", InstanceConfig: configurations.InstanceConfigOpts{}}).Extract()
+	if err != nil {
+		return
+	}
+	fmt.Println(id)
 }
