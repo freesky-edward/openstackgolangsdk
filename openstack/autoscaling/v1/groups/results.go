@@ -88,3 +88,8 @@ func (r GroupPage) Extract() ([]Group, error) {
 	err := r.Result.ExtractIntoSlicePtr(gs, "scaling_groups")
 	return gs, err
 }
+
+//this is the action result which is the result of enable or disable operations
+type ActionResult struct {
+	gophercloud.ErrResult
+}

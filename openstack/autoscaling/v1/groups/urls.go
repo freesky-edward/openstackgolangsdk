@@ -19,3 +19,7 @@ func getGroupUrl(c *gophercloud.ServiceClient, id string) string {
 func listGroupUrl(c *gophercloud.ServiceClient) string {
 	return c.ServiceURL("scaling_group")
 }
+
+func enableUrl(c *gophercloud.ServiceClient, id string) string {
+	return c.ServiceURL("scaling_group", id, "action")
+}

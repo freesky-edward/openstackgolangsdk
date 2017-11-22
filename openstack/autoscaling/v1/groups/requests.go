@@ -108,3 +108,41 @@ func List(client *gophercloud.ServiceClient, ops ListOpsBuilder) pagination.Page
 		return GroupPage{pagination.SinglePageBase(r)}
 	})
 }
+
+type ActionOpsBuilder interface {
+	ToActionMap() (map[string]interface{}, error)
+}
+
+type ActionOps struct {
+	Action string `json:"action" required:"true"`
+}
+
+func (ops ActionOps) ToActionMap() (map[string]interface{}, error) {
+	return gophercloud.BuildRequestBody(ops, "")
+}
+
+func doAction(client *gophercloud.ServiceClient, id string, ops ActionOpsBuilder) (r ActionResult) {
+	b, err := ops.ToActionMap()
+	if err != nil {
+		r.Err = err
+		return
+	}
+	_, r.Err = client.Post(enableUrl(client, id), &b, nil, nil)
+	return
+}
+
+//Enable is an operation by which can make the group enable service
+func Enable(client *gophercloud.ServiceClient, id string) (r ActionResult) {
+	ops := ActionOps{
+		Action: "resume",
+	}
+	return doAction(client, id, ops)
+}
+
+//Disable is an operation by which can be able to pause the group
+func Disable(client *gophercloud.ServiceClient, id string) (r ActionResult) {
+	ops := ActionOps{
+		Action: "pause",
+	}
+	return doAction(client, id, ops)
+}
