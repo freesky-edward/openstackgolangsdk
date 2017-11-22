@@ -5,19 +5,6 @@ import (
 	"github.com/gophercloud/gophercloud/pagination"
 )
 
-type HealthCheckMethod string
-type InstanceTerminatePolicy string
-
-const (
-	ELB_AUDIT  HealthCheckMethod = "ELB_AUDIT"
-	NOVA_AUDIT HealthCheckMethod = "NOVA_AUDIT"
-
-	OLD_CONFIG_OLD_INSTANCE InstanceTerminatePolicy = "OLD_CONFIG_OLD_INSTANCE"
-	OLD_CONFIG_NEW_INSTANCE InstanceTerminatePolicy = "OLD_CONFIG_NEW_INSTANCE"
-	OLD_INSTANCE            InstanceTerminatePolicy = "OLD_INSTANCE"
-	NEW_INSTANCE            InstanceTerminatePolicy = "NEW_INSTANCE"
-)
-
 //CreateGroupBuilder is an interface from which can build the request of creating group
 type CreateGroupBuilder interface {
 	ToCreateGroupMap() (map[string]interface{}, error)
@@ -25,22 +12,22 @@ type CreateGroupBuilder interface {
 
 //CreateGroupOps is a struct contains the parameters of creating group
 type CreateGroupOps struct {
-	GroupName                 string                  `json:"scaling_group_name" required:"true"`
-	ConfigurationID           string                  `json:"scaling_configuration_id,omitempty"`
-	DesireInstanceNumber      int                     `json:"desire_instance_number,omitempty"`
-	MinInstanceNumber         int                     `json:"min_instance_number,omitempty"`
-	MaxInstanceNumber         int                     `json:"max_instance_number,omitempty"`
-	CoolDownTime              int                     `json:"cool_down_time,omitempty"`
-	LBInstanceID              string                  `json:"lb_listener_id,omitempty`
-	AvailableZones            []string                `json:"available_zones,omitempty"`
-	Networks                  []NetworkOps            `json:"networks" required:"ture"`
-	SecurityGroup             []SecurityGroupOps      `json:"security_groups" required:"ture"`
-	VpcID                     string                  `json:"vpc_id" required:"ture"`
-	HealthPeriodicAuditMethod HealthCheckMethod       `json:"health_periodic_audit_method,omitempty"`
-	HealthPeriodicAuditTime   int                     `json:"health_periodic_audit_time,omitempty"`
-	InstanceTerminatePolicy   InstanceTerminatePolicy `json:"instance_terminate_policy,omitempty"`
-	Notifications             []string                `json:"notifications,omitempty"`
-	IsDeletePublicip          bool                    `json:"delete_publicip,omitempty"`
+	GroupName                 string             `json:"scaling_group_name" required:"true"`
+	ConfigurationID           string             `json:"scaling_configuration_id,omitempty"`
+	DesireInstanceNumber      int                `json:"desire_instance_number,omitempty"`
+	MinInstanceNumber         int                `json:"min_instance_number,omitempty"`
+	MaxInstanceNumber         int                `json:"max_instance_number,omitempty"`
+	CoolDownTime              int                `json:"cool_down_time,omitempty"`
+	LBListenerID              string             `json:"lb_listener_id,omitempty`
+	AvailableZones            []string           `json:"available_zones,omitempty"`
+	Networks                  []NetworkOps       `json:"networks" required:"ture"`
+	SecurityGroup             []SecurityGroupOps `json:"security_groups" required:"ture"`
+	VpcID                     string             `json:"vpc_id" required:"ture"`
+	HealthPeriodicAuditMethod string             `json:"health_periodic_audit_method,omitempty"`
+	HealthPeriodicAuditTime   int                `json:"health_periodic_audit_time,omitempty"`
+	InstanceTerminatePolicy   string             `json:"instance_terminate_policy,omitempty"`
+	Notifications             []string           `json:"notifications,omitempty"`
+	IsDeletePublicip          bool               `json:"delete_publicip,omitempty"`
 }
 
 type NetworkOps struct {
