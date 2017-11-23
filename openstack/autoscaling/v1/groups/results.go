@@ -6,12 +6,12 @@ import (
 )
 
 //CreateGroupResult is a struct retured by CreateGroup request
-type CreateGroupResult struct {
+type CreateResult struct {
 	gophercloud.Result
 }
 
 //Extract the create group result as a string type.
-func (r CreateGroupResult) Extract() (string, error) {
+func (r CreateResult) Extract() (string, error) {
 	var a struct {
 		GroupID string `json:"scaling_group_id"`
 	}
@@ -20,17 +20,17 @@ func (r CreateGroupResult) Extract() (string, error) {
 }
 
 //DeleteGroupResult contains the body of the deleting group request
-type DeleteGroupResult struct {
+type DeleteResult struct {
 	gophercloud.ErrResult
 }
 
 //GetGroupResult contains the body of getting detailed group request
-type GetGroupResult struct {
+type GetResult struct {
 	gophercloud.Result
 }
 
 //Extract method will parse the result body into Group struct
-func (r GetGroupResult) Extract() (*Group, error) {
+func (r GetResult) Extract() (*Group, error) {
 	var a Group
 	err := r.Result.ExtractInto(&a)
 	return &a, err
@@ -38,9 +38,9 @@ func (r GetGroupResult) Extract() (*Group, error) {
 
 //Group represents the struct of one autoscaling group
 type Group struct {
-	GroupName                 string          `json:"scaling_group_name"`
-	GroupID                   string          `json:"scaling_group_id"`
-	GroupStatus               string          `json:"scaling_group_status"`
+	Name                      string          `json:"scaling_group_name"`
+	ID                        string          `json:"scaling_group_id"`
+	Status                    string          `json:"scaling_group_status"`
 	ConfigurationID           string          `json:"scaling_configuration_id"`
 	ConfigurationName         string          `json:"scaling_configuration_name"`
 	ActualInstanceNumber      int             `json:"current_instance_number"`

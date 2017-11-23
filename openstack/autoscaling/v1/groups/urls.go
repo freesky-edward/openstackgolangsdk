@@ -4,22 +4,22 @@ import (
 	"github.com/gophercloud/gophercloud"
 )
 
-func createGroupUrl(c *gophercloud.ServiceClient) string {
+func createURL(c *gophercloud.ServiceClient) string {
 	return c.ServiceURL("scaling_group")
 }
 
-func deleteGroupUrl(c *gophercloud.ServiceClient, id string) string {
+func deleteURL(c *gophercloud.ServiceClient, id string) string {
 	return c.ServiceURL("scaling_group", id)
 }
 
-func getGroupUrl(c *gophercloud.ServiceClient, id string) string {
+func getURL(c *gophercloud.ServiceClient, id string) string {
 	return c.ServiceURL("scaling_group", id)
 }
 
-func listGroupUrl(c *gophercloud.ServiceClient) string {
+func listURL(c *gophercloud.ServiceClient) string {
 	return c.ServiceURL("scaling_group")
 }
 
-func enableUrl(c *gophercloud.ServiceClient, id string) string {
+func enableURL(c *gophercloud.ServiceClient, id string) string {
 	return c.ServiceURL("scaling_group", id, "action")
 }

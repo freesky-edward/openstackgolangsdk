@@ -8,12 +8,12 @@ type CreateOptsBuilder interface {
 	ToConfigurationCreateMap() (map[string]interface{}, error)
 }
 
-type CreateConfigurationOpts struct {
+type CreateOpts struct {
 	Name           string             `json:"scaling_configuration_name" required:"true"`
 	InstanceConfig InstanceConfigOpts `json:"instance_config" required:"true"`
 }
 
-func (opts CreateConfigurationOpts) ToConfigurationCreateMap() (map[string]interface{}, error) {
+func (opts CreateOpts) ToConfigurationCreateMap() (map[string]interface{}, error) {
 	return gophercloud.BuildRequestBody(&opts, "")
 }
 
@@ -23,7 +23,7 @@ type InstanceConfigOpts struct {
 	FlavorRef   string                 `jsno:"flavorRef,omitempty"`
 	ImageRef    string                 `json:"imageRef,omitempty"`
 	Disk        DiskOpts               `json:"disk,omitempty"`
-	KeyName     string                 `json:"key_name,omitempty"`
+	SSHKey      string                 `json:"key_name,omitempty"`
 	Personality []PersonalityOpts      `json:"personality,omitempty"`
 	PubicIp     PublicIpOpts           `json:"public_ip,omitempty"`
 	UserData    string                 `json:"user_data,omitempty"`
@@ -59,7 +59,7 @@ type BandwidthOpts struct {
 
 //Create is a method by which can be able to access to create a configuration
 //of autoscaling
-func Create(client *gophercloud.ServiceClient, opts CreateOptsBuilder) (r CreateConfigurationResult) {
+func Create(client *gophercloud.ServiceClient, opts CreateOptsBuilder) (r CreateResult) {
 	b, err := opts.ToConfigurationCreateMap()
 	if err != nil {
 		r.Err = err
@@ -73,12 +73,12 @@ func Create(client *gophercloud.ServiceClient, opts CreateOptsBuilder) (r Create
 
 //Get is a method by which can be able to access to get a configuration of
 //autoscaling detailed information
-func Get(client *gophercloud.ServiceClient, id string) (r GetConfigurationResult) {
+func Get(client *gophercloud.ServiceClient, id string) (r GetResult) {
 	_, r.Err = client.Get(getURL(client, id), &r.Body, nil)
 	return
 }
 
-func Delete(client *gophercloud.ServiceClient, id string) (r DeleteConfigurationResult) {
+func Delete(client *gophercloud.ServiceClient, id string) (r DeleteResult) {
 	_, r.Err = client.Delete(deleteURL(client, id), nil)
 	return
 }

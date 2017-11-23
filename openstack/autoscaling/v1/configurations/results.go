@@ -5,11 +5,11 @@ import (
 )
 
 //CreateResult is a struct that contains all the return parameters of creation
-type CreateConfigurationResult struct {
+type CreateResult struct {
 	gophercloud.Result
 }
 
-func (r CreateConfigurationResult) Extract() (string, error) {
+func (r CreateResult) Extract() (string, error) {
 	var a struct {
 		ID string `json:"scaling_configuration_id"`
 	}
@@ -18,11 +18,11 @@ func (r CreateConfigurationResult) Extract() (string, error) {
 	return a.ID, err
 }
 
-type GetConfigurationResult struct {
+type GetResult struct {
 	gophercloud.Result
 }
 
-func (r GetConfigurationResult) Extract() (Configuration, error) {
+func (r GetResult) Extract() (Configuration, error) {
 	var a Configuration
 	err := r.Result.ExtractIntoStructPtr(&a, "scaling_configuration")
 	return a, err
@@ -76,6 +76,6 @@ type Bandwidth struct {
 	ChargingMode string `json:"charging_mode"`
 }
 
-type DeleteConfigurationResult struct {
+type DeleteResult struct {
 	gophercloud.ErrResult
 }

@@ -29,7 +29,7 @@ func main() {
 
 	sc, _ := openstack.NewAutoScalingService(client, eo)
 
-	page, err := groups.List(sc, groups.ListOps{}).AllPages()
+	page, err := groups.List(sc, groups.ListOpts{}).AllPages()
 	if err != nil {
 		return
 	}
@@ -40,10 +40,10 @@ func main() {
 	}
 
 	for _, group := range gs {
-		fmt.Println(group.GroupName)
+		fmt.Println(group.Name)
 	}
 
-	g, err := groups.Create(sc, groups.CreateGroupOps{GroupName: "", Networks: nil, SecurityGroup: nil, VpcID: ""}).Extract()
+	g, err := groups.Create(sc, groups.CreateOpts{Name: "", Networks: nil, SecurityGroup: nil, VpcID: ""}).Extract()
 
 	if err != nil {
 		return
@@ -52,7 +52,7 @@ func main() {
 
 	//TODO deal with the instance object
 
-	id, err := configurations.Create(sc, configurations.CreateConfigurationOpts{Name: "hello", InstanceConfig: configurations.InstanceConfigOpts{}}).Extract()
+	id, err := configurations.Create(sc, configurations.CreateOpts{Name: "hello", InstanceConfig: configurations.InstanceConfigOpts{}}).Extract()
 	if err != nil {
 		return
 	}
