@@ -7,6 +7,7 @@ import (
 	"github.com/gophercloud/gophercloud/openstack"
 	"github.com/gophercloud/gophercloud/openstack/autoscaling/v1/configurations"
 	"github.com/gophercloud/gophercloud/openstack/autoscaling/v1/groups"
+	"github.com/gophercloud/gophercloud/openstack/autoscaling/v1/policies"
 )
 
 func main() {
@@ -70,4 +71,10 @@ func main() {
 		return
 	}
 	fmt.Println(id)
+
+	pid, err := policies.Create(sc, policies.CreateOpts{Name: ""}).Extract()
+	if err != nil {
+		return
+	}
+	fmt.Println(pid)
 }
