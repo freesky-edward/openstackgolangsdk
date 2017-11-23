@@ -89,6 +89,20 @@ func (r GroupPage) Extract() ([]Group, error) {
 	return gs, err
 }
 
+//UpdateResult is a struct from which can get the result of udpate method
+type UpdateResult struct {
+	gophercloud.Result
+}
+
+//Extract will deserialize the result to group id with string
+func (r UpdateResult) Extract() (string, error) {
+	var a struct {
+		ID string `json:"scaling_group_id"`
+	}
+	err := r.Result.ExtractInto(&a)
+	return a.ID, err
+}
+
 //this is the action result which is the result of enable or disable operations
 type ActionResult struct {
 	gophercloud.ErrResult

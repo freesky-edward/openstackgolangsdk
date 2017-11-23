@@ -23,3 +23,7 @@ func listURL(c *gophercloud.ServiceClient) string {
 func enableURL(c *gophercloud.ServiceClient, id string) string {
 	return c.ServiceURL("scaling_group", id, "action")
 }
+
+func updateURL(c *gophercloud.ServiceClient, id string) string {
+	return c.ServiceURL("scaling_group", id)
+}

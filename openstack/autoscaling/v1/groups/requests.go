@@ -96,6 +96,48 @@ func List(client *gophercloud.ServiceClient, ops ListOptsBuilder) pagination.Pag
 	})
 }
 
+//UpdateOptsBuilder is an interface which can build the map paramter of update function
+type UpdateOptsBuilder interface {
+	ToGroupUpdateMap() (map[string]interface{}, error)
+}
+
+//UpdateOpts is a struct which represents the parameters of update function
+type UpdateOpts struct {
+	Name                      string              `json:"scaling_group_name" required:"true"`
+	DesireInstanceNumber      int                 `json:"desire_instance_number,omitempty"`
+	MinInstanceNumber         int                 `json:"min_instance_number,omitempty"`
+	MaxInstanceNumber         int                 `json:"max_instance_number,omitempty"`
+	CoolDownTime              int                 `json:"cool_down_time,omitempty"`
+	LBListenerID              string              `json:"lb_listener_id,omitempty`
+	AvailableZones            []string            `json:"available_zones,omitempty"`
+	Networks                  []NetworkOpts       `json:"networks" required:"ture"`
+	SecurityGroup             []SecurityGroupOpts `json:"security_groups" required:"ture"`
+	HealthPeriodicAuditMethod string              `json:"health_periodic_audit_method,omitempty"`
+	HealthPeriodicAuditTime   int                 `json:"health_periodic_audit_time,omitempty"`
+	InstanceTerminatePolicy   string              `json:"instance_terminate_policy,omitempty"`
+	Notifications             []string            `json:"notifications,omitempty"`
+	IsDeletePublicip          bool                `json:"delete_publicip,omitempty"`
+}
+
+func (opts UpdateOpts) ToGroupUpdateMap() (map[string]interface{}, error) {
+	return gophercloud.BuildRequestBody(opts, "")
+}
+
+//Update is a method which can be able to update the group via accessing to the
+//autoscaling service with Put method and parameters
+func Update(client *gophercloud.ServiceClient, id string, opts UpdateOptsBuilder) (r UpdateResult) {
+	body, err := opts.ToGroupUpdateMap()
+	if err != nil {
+		r.Err = err
+		return
+	}
+
+	_, r.Err = client.Put(updateURL(client, id), body, &r.Body, &gophercloud.RequestOpts{
+		OkCodes: []int{200},
+	})
+	return
+}
+
 type ActionOptsBuilder interface {
 	ToActionMap() (map[string]interface{}, error)
 }
