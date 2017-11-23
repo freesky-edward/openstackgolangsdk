@@ -2,6 +2,7 @@ package configurations
 
 import (
 	"github.com/gophercloud/gophercloud"
+	"github.com/gophercloud/gophercloud/pagination"
 )
 
 //CreateResult is a struct that contains all the return parameters of creation
@@ -78,4 +79,20 @@ type Bandwidth struct {
 
 type DeleteResult struct {
 	gophercloud.ErrResult
+}
+
+type ConfigurationPage struct {
+	pagination.SinglePageBase
+}
+
+// IsEmpty returns true if a ListResult contains no Volumes.
+func (r ConfigurationPage) IsEmpty() (bool, error) {
+	configs, err := r.Extract()
+	return len(configs) == 0, err
+}
+
+func (r ConfigurationPage) Extract() ([]Configuration, error) {
+	var cs []Configuration
+	err := r.Result.ExtractIntoSlicePtr(cs, "scaling_groups")
+	return cs, err
 }

@@ -2,6 +2,7 @@ package configurations
 
 import (
 	"github.com/gophercloud/gophercloud"
+	"github.com/gophercloud/gophercloud/pagination"
 )
 
 type CreateOptsBuilder interface {
@@ -78,7 +79,38 @@ func Get(client *gophercloud.ServiceClient, id string) (r GetResult) {
 	return
 }
 
+//Delete
 func Delete(client *gophercloud.ServiceClient, id string) (r DeleteResult) {
 	_, r.Err = client.Delete(deleteURL(client, id), nil)
 	return
+}
+
+type ListOptsBuilder interface {
+	ToConfigurationListQuery() (string, error)
+}
+
+type ListOpts struct {
+	Name    string `q:"scaling_configuration_name"`
+	ImageID string `q:"image_id"`
+}
+
+func (opts ListOpts) ToConfigurationListQuery() (string, error) {
+	q, err := gophercloud.BuildQueryString(opts)
+	return q.String(), err
+}
+
+//List is method that can be able to list all configurations of autoscaling service
+func List(client *gophercloud.ServiceClient, opts ListOptsBuilder) pagination.Pager {
+	url := listURL(client)
+	if opts != nil {
+		query, err := opts.ToConfigurationListQuery()
+		if err != nil {
+			return pagination.Pager{Err: err}
+		}
+		url += query
+	}
+
+	return pagination.NewPager(client, url, func(r pagination.PageResult) pagination.Page {
+		return ConfigurationPage{pagination.SinglePageBase(r)}
+	})
 }

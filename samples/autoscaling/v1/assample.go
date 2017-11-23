@@ -52,6 +52,19 @@ func main() {
 
 	//TODO deal with the instance object
 
+	p, err := configurations.List(sc, configurations.ListOpts{}).AllPages()
+	if err != nil {
+		return
+	}
+
+	cs, err := p.(configurations.ConfigurationPage).Extract()
+	if err != nil {
+		return
+	}
+	for _, config := range cs {
+		fmt.Println(config.Name)
+	}
+
 	id, err := configurations.Create(sc, configurations.CreateOpts{Name: "hello", InstanceConfig: configurations.InstanceConfigOpts{}}).Extract()
 	if err != nil {
 		return
