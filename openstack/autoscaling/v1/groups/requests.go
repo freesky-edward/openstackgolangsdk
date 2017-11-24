@@ -18,7 +18,7 @@ type CreateOpts struct {
 	MinInstanceNumber         int                 `json:"min_instance_number,omitempty"`
 	MaxInstanceNumber         int                 `json:"max_instance_number,omitempty"`
 	CoolDownTime              int                 `json:"cool_down_time,omitempty"`
-	LBListenerID              string              `json:"lb_listener_id,omitempty`
+	LBListenerID              string              `json:"lb_listener_id,omitempty"`
 	AvailableZones            []string            `json:"available_zones,omitempty"`
 	Networks                  []NetworkOpts       `json:"networks" required:"ture"`
 	SecurityGroup             []SecurityGroupOpts `json:"security_groups" required:"ture"`
@@ -35,7 +35,7 @@ type NetworkOpts struct {
 }
 
 type SecurityGroupOpts struct {
-	ID string `json:"id,omitempty`
+	ID string `json:"id,omitempty"`
 }
 
 func (opts CreateOpts) ToGroupCreateMap() (map[string]interface{}, error) {
@@ -108,7 +108,7 @@ type UpdateOpts struct {
 	MinInstanceNumber         int                 `json:"min_instance_number,omitempty"`
 	MaxInstanceNumber         int                 `json:"max_instance_number,omitempty"`
 	CoolDownTime              int                 `json:"cool_down_time,omitempty"`
-	LBListenerID              string              `json:"lb_listener_id,omitempty`
+	LBListenerID              string              `json:"lb_listener_id,omitempty"`
 	AvailableZones            []string            `json:"available_zones,omitempty"`
 	Networks                  []NetworkOpts       `json:"networks" required:"ture"`
 	SecurityGroup             []SecurityGroupOpts `json:"security_groups" required:"ture"`
