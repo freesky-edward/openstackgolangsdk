@@ -7,6 +7,7 @@ import (
 	"github.com/gophercloud/gophercloud/openstack"
 	"github.com/gophercloud/gophercloud/openstack/autoscaling/v1/configurations"
 	"github.com/gophercloud/gophercloud/openstack/autoscaling/v1/groups"
+	"github.com/gophercloud/gophercloud/openstack/autoscaling/v1/instances"
 	"github.com/gophercloud/gophercloud/openstack/autoscaling/v1/policies"
 )
 
@@ -77,4 +78,10 @@ func main() {
 		return
 	}
 	fmt.Println(pid)
+
+	var instanceID = ""
+	err = instances.Delete(sc, instanceID, instances.DeleteOpts{DeleteInstance: true}).ExtractErr()
+	if err != nil {
+		fmt.Println(err)
+	}
 }
