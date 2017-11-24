@@ -15,3 +15,9 @@ func listURL(client *gophercloud.ServiceClient, groupID string) string {
 func deleteURL(client *gophercloud.ServiceClient, id string) string {
 	return client.ServiceURL("scaling_group_instance", id)
 }
+
+//batchURL will build the query url by which can be able to batch add or delete
+//instances
+func batchURL(client *gophercloud.ServiceClient, groupID string) string {
+	return client.ServiceURL("scaling_group_instance", groupID, "action")
+}

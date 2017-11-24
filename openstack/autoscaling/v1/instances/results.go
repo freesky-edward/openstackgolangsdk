@@ -39,3 +39,8 @@ func (r InstancePage) Extract() ([]Instance, error) {
 type DeleteResult struct {
 	gophercloud.ErrResult
 }
+
+//BatchResult is a struct which contains the result of batch operations
+type BatchResult struct {
+	gophercloud.ErrResult
+}
