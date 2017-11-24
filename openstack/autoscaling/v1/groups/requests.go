@@ -49,7 +49,9 @@ func Create(client *gophercloud.ServiceClient, opts CreateOptsBuilder) (r Create
 		r.Err = err
 		return
 	}
-	_, r.Err = client.Post(createURL(client), b, &r.Body, nil)
+	_, r.Err = client.Post(createURL(client), b, &r.Body, &gophercloud.RequestOpts{
+		OkCodes: []int{200},
+	})
 	return
 }
 
@@ -156,7 +158,9 @@ func doAction(client *gophercloud.ServiceClient, id string, opts ActionOptsBuild
 		r.Err = err
 		return
 	}
-	_, r.Err = client.Post(enableURL(client, id), &b, nil, nil)
+	_, r.Err = client.Post(enableURL(client, id), &b, nil, &gophercloud.RequestOpts{
+		OkCodes: []int{204},
+	})
 	return
 }
 
