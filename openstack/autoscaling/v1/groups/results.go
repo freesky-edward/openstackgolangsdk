@@ -15,7 +15,7 @@ func (r CreateResult) Extract() (string, error) {
 	var a struct {
 		GroupID string `json:"scaling_group_id"`
 	}
-	err := r.Result.ExtractInto(a)
+	err := r.Result.ExtractInto(&a)
 	return a.GroupID, err
 }
 
@@ -85,7 +85,7 @@ func (r GroupPage) IsEmpty() (bool, error) {
 
 func (r GroupPage) Extract() ([]Group, error) {
 	var gs []Group
-	err := r.Result.ExtractIntoSlicePtr(gs, "scaling_groups")
+	err := r.Result.ExtractIntoSlicePtr(&gs, "scaling_groups")
 	return gs, err
 }
 

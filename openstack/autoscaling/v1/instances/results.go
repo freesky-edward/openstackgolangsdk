@@ -31,7 +31,7 @@ func (r InstancePage) IsEmpty() (bool, error) {
 
 func (r InstancePage) Extract() ([]Instance, error) {
 	var instances []Instance
-	err := r.Result.ExtractIntoSlicePtr(instances, "scaling_group_instances")
+	err := r.Result.ExtractIntoSlicePtr(&instances, "scaling_group_instances")
 	return instances, err
 }
 

@@ -14,7 +14,7 @@ func (r CreateResult) Extract() (string, error) {
 	var a struct {
 		ID string `json:"scaling_policy_id"`
 	}
-	err := r.Result.ExtractInto(a)
+	err := r.Result.ExtractInto(&a)
 	return a.ID, err
 }
 
@@ -56,6 +56,6 @@ type GetResult struct {
 
 func (r GetResult) Extract() (Policy, error) {
 	var p Policy
-	err := r.Result.ExtractIntoSlicePtr(p, "scaling_policy")
+	err := r.Result.ExtractIntoSlicePtr(&p, "scaling_policy")
 	return p, err
 }
