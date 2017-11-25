@@ -105,20 +105,21 @@ type UpdateOptsBuilder interface {
 
 //UpdateOpts is a struct which represents the parameters of update function
 type UpdateOpts struct {
-	Name                      string              `json:"scaling_group_name" required:"true"`
+	Name                      string              `json:"scaling_group_name,omitempty"`
 	DesireInstanceNumber      int                 `json:"desire_instance_number,omitempty"`
 	MinInstanceNumber         int                 `json:"min_instance_number,omitempty"`
 	MaxInstanceNumber         int                 `json:"max_instance_number,omitempty"`
 	CoolDownTime              int                 `json:"cool_down_time,omitempty"`
 	LBListenerID              string              `json:"lb_listener_id,omitempty"`
 	AvailableZones            []string            `json:"available_zones,omitempty"`
-	Networks                  []NetworkOpts       `json:"networks" required:"ture"`
-	SecurityGroup             []SecurityGroupOpts `json:"security_groups" required:"ture"`
+	Networks                  []NetworkOpts       `json:"networks,omitempty"`
+	SecurityGroup             []SecurityGroupOpts `json:"security_groups,omitempty"`
 	HealthPeriodicAuditMethod string              `json:"health_periodic_audit_method,omitempty"`
 	HealthPeriodicAuditTime   int                 `json:"health_periodic_audit_time,omitempty"`
 	InstanceTerminatePolicy   string              `json:"instance_terminate_policy,omitempty"`
 	Notifications             []string            `json:"notifications,omitempty"`
 	IsDeletePublicip          bool                `json:"delete_publicip,omitempty"`
+	ConfigurationID           string              `json:"scaling_configuration_id,omitempty"`
 }
 
 func (opts UpdateOpts) ToGroupUpdateMap() (map[string]interface{}, error) {
