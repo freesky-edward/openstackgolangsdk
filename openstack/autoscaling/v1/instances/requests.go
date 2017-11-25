@@ -75,7 +75,7 @@ type BatchOptsBuilder interface {
 //BatchOpts is a struct which represents parameters of batch operations
 type BatchOpts struct {
 	Instances   []string `json:"instances_id" required:"true"`
-	IsDeleteEcs string   `josn:"instance_delete,omitempty"`
+	IsDeleteEcs string   `json:"instance_delete,omitempty"`
 	Action      string   `json:"action,omitempty"`
 }
 

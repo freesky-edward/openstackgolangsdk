@@ -21,7 +21,7 @@ func (opts CreateOpts) ToConfigurationCreateMap() (map[string]interface{}, error
 //InstanceConfigOpts is an inner struct of CreateOpts
 type InstanceConfigOpts struct {
 	ID          string                 `json:"instance_id,omitempty"`
-	FlavorRef   string                 `jsno:"flavorRef,omitempty"`
+	FlavorRef   string                 `json:"flavorRef,omitempty"`
 	ImageRef    string                 `json:"imageRef,omitempty"`
 	Disk        DiskOpts               `json:"disk,omitempty"`
 	SSHKey      string                 `json:"key_name,omitempty"`
