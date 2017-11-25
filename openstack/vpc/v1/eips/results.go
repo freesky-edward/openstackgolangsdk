@@ -17,12 +17,46 @@ func (r ApplyResult) Extract() (PublicIp, error) {
 	return ip.Ip, err
 }
 
+//PublicIp is a struct that represents a public ip
 type PublicIp struct {
-	ID            string `json:"id"`
-	Status        string `json:"status"`
-	Type          string `json:"type"`
-	Address       string `json:"public_ip_address"`
-	TenantID      string `json:"tenant_id"`
-	CreateTime    string `json:"create_time"`
-	BandwidthSize int    `json:"bandwidth_size"`
+	ID                 string `json:"id"`
+	Status             string `json:"status"`
+	Type               string `json:"type"`
+	PublicAddress      string `json:"public_ip_address"`
+	PrivateAddress     string `json:"private_ip_address"`
+	PortID             string `json:"port_id"`
+	TenantID           string `json:"tenant_id"`
+	CreateTime         string `json:"create_time"`
+	BandwidthID        string `json:"bandwidth_id"`
+	BandwidthSize      int    `json:"bandwidth_size"`
+	BandwidthShareType string `json:"bandwidth_share_type"`
+}
+
+//GetResult is a return struct of get method
+type GetResult struct {
+	gophercloud.Result
+}
+
+func (r GetResult) Extract() (PublicIp, error) {
+	var Ip struct {
+		Ip PublicIp `json:"publicip"`
+	}
+	err := r.Result.ExtractInto(&Ip)
+	return Ip.Ip, err
+}
+
+//DeleteResult is a struct of delete result
+type DeleteResult struct {
+	gophercloud.ErrResult
+}
+
+//UpdateResult is a struct which contains the result of update method
+type UpdateResult struct {
+	gophercloud.Result
+}
+
+func (r UpdateResult) Extract() (PublicIp, error) {
+	var ip PublicIp
+	err := r.Result.ExtractIntoStructPtr(&ip, "publicip")
+	return ip, err
 }

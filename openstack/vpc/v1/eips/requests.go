@@ -44,3 +44,43 @@ func Apply(client *gophercloud.ServiceClient, opts ApplyOptsBuilder) (r ApplyRes
 	})
 	return
 }
+
+//Get is a method by which can get the detailed information of public ip
+func Get(client *gophercloud.ServiceClient, id string) (r GetResult) {
+	_, r.Err = client.Get(getURL(client, id), &r.Body, nil)
+	return
+}
+
+//Delete is a method by which can be able to delete a private ip
+func Delete(client *gophercloud.ServiceClient, id string) (r DeleteResult) {
+	_, r.Err = client.Delete(deleteURL(client, id), nil)
+	return
+}
+
+//UpdateOptsBuilder is an interface by which can be able to build the request
+//body
+type UpdateOptsBuilder interface {
+	ToPublicIpUpdateMap() (map[string]interface{}, error)
+}
+
+//UpdateOpts is a struct which represents the request body of update method
+type UpdateOpts struct {
+	PortID string `json:"port_id,omitempty"`
+}
+
+func (opts UpdateOpts) ToPublicIpUpdateMap() (map[string]interface{}, error) {
+	return gophercloud.BuildRequestBody(opts, "publicip")
+}
+
+//Update is a method which can be able to update the port of public ip
+func Update(client *gophercloud.ServiceClient, id string, opts UpdateOptsBuilder) (r UpdateResult) {
+	b, err := opts.ToPublicIpUpdateMap()
+	if err != nil {
+		r.Err = err
+		return
+	}
+	_, r.Err = client.Put(updateURL(client, id), b, &r.Body, &gophercloud.RequestOpts{
+		OkCodes: []int{200},
+	})
+	return
+}
