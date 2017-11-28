@@ -23,7 +23,7 @@ type InstanceConfigOpts struct {
 	ID          string                 `json:"instance_id,omitempty"`
 	FlavorRef   string                 `json:"flavorRef,omitempty"`
 	ImageRef    string                 `json:"imageRef,omitempty"`
-	Disk        DiskOpts               `json:"disk,omitempty"`
+	Disk        []DiskOpts             `json:"disk,omitempty"`
 	SSHKey      string                 `json:"key_name,omitempty"`
 	Personality []PersonalityOpts      `json:"personality,omitempty"`
 	PubicIp     PublicIpOpts           `json:"public_ip,omitempty"`
