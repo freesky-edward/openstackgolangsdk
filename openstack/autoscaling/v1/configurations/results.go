@@ -40,7 +40,7 @@ type Configuration struct {
 type InstanceConfig struct {
 	FlavorRef    string        `json:"flavorRef"`
 	ImageRef     string        `json:"imageRef"`
-	Disk         Disk          `json:"disk"`
+	Disk         []Disk        `json:"disk"`
 	SSHKey       string        `json:"key_name"`
 	InstanceName string        `json:"instance_name"`
 	InstanceID   string        `json:"instance_id"`
