@@ -3,6 +3,7 @@ package configurations
 import (
 	"github.com/gophercloud/gophercloud"
 	"github.com/gophercloud/gophercloud/pagination"
+	"log"
 )
 
 type CreateOptsBuilder interface {
@@ -15,7 +16,44 @@ type CreateOpts struct {
 }
 
 func (opts CreateOpts) ToConfigurationCreateMap() (map[string]interface{}, error) {
-	return gophercloud.BuildRequestBody(&opts, "")
+	b, err := gophercloud.BuildRequestBody(opts, "")
+	if err != nil {
+		return nil, err
+	}
+	log.Printf("[DEBUG] ToConfigurationCreateMap b is: %#v", b)
+	log.Printf("[DEBUG] ToConfigurationCreateMap opts is: %#v", opts)
+	publicIp := opts.InstanceConfig.PubicIp
+	log.Printf("[DEBUG] ToConfigurationCreateMap publicIp is: %#v", publicIp)
+
+	if publicIp != (PublicIpOpts{}){
+		public_ip := map[string]interface{}{}
+		eip := map[string]interface{}{}
+		bandwidth := map[string]interface{}{}
+		eip_raw := publicIp.Eip
+		log.Printf("[DEBUG] ToConfigurationCreateMap eip_raw is: %#v", eip_raw)
+		if eip_raw != (EipOpts{}) {
+			if eip_raw.IpType != "" {
+				eip["ip_type"] = eip_raw.IpType
+			}
+			bandWidth := eip_raw.Bandwidth
+			if bandWidth != (BandwidthOpts{}) {
+				if bandWidth.Size > 0 {
+					bandwidth["size"] = bandWidth.Size
+				}
+				if bandWidth.ChargingMode != "" {
+					bandwidth["charging_mode"] = bandWidth.ChargingMode
+				}
+				if bandWidth.ShareType != "" {
+					bandwidth["share_type"] = bandWidth.ShareType
+				}
+				eip["bandwidth"] = bandwidth
+			}
+			public_ip["eip"] = eip
+		}
+		b["instance_config"].(map[string]interface{})["public_ip"] = public_ip
+	}
+	log.Printf("[DEBUG] ToConfigurationCreateMap b is: %#v", b)
+	return b, nil
 }
 
 //InstanceConfigOpts is an inner struct of CreateOpts
@@ -26,7 +64,7 @@ type InstanceConfigOpts struct {
 	Disk        []DiskOpts             `json:"disk,omitempty"`
 	SSHKey      string                 `json:"key_name,omitempty"`
 	Personality []PersonalityOpts      `json:"personality,omitempty"`
-	PubicIp     PublicIpOpts           `json:"public_ip,omitempty"`
+	PubicIp     PublicIpOpts           `json:"-"`
 	UserData    string                 `json:"user_data,omitempty"`
 	Metadata    map[string]interface{} `json:"metadata,omitempty"` //TODO not sure the type
 }
@@ -44,18 +82,18 @@ type PersonalityOpts struct {
 }
 
 type PublicIpOpts struct {
-	Eip EipOpts `json:"eip" required:"true"`
+	Eip EipOpts `json:"-"`
 }
 
 type EipOpts struct {
-	IpType    string        `json:"ip_type" required:"true"`
-	Bandwidth BandwidthOpts `json:"bandwidth" required:"true"`
+	IpType    string
+	Bandwidth BandwidthOpts
 }
 
 type BandwidthOpts struct {
-	Size         int    `json:"size" required:"true"`
-	ShareType    string `json:"share_type" required:"true"`
-	ChargingMode string `json:"charging_mode" required:"true"`
+	Size         int
+	ShareType    string
+	ChargingMode string
 }
 
 //Create is a method by which can be able to access to create a configuration
