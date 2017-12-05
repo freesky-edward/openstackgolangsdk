@@ -1,6 +1,7 @@
 package configurations
 
 import (
+	"encoding/base64"
 	"github.com/gophercloud/gophercloud"
 	"github.com/gophercloud/gophercloud/pagination"
 	"log"
@@ -25,7 +26,7 @@ func (opts CreateOpts) ToConfigurationCreateMap() (map[string]interface{}, error
 	publicIp := opts.InstanceConfig.PubicIp
 	log.Printf("[DEBUG] ToConfigurationCreateMap publicIp is: %#v", publicIp)
 
-	if publicIp != (PublicIpOpts{}){
+	if publicIp != (PublicIpOpts{}) {
 		public_ip := map[string]interface{}{}
 		eip := map[string]interface{}{}
 		bandwidth := map[string]interface{}{}
@@ -52,21 +53,32 @@ func (opts CreateOpts) ToConfigurationCreateMap() (map[string]interface{}, error
 		}
 		b["instance_config"].(map[string]interface{})["public_ip"] = public_ip
 	}
+	if opts.InstanceConfig.UserData != nil {
+		var userData string
+		if _, err := base64.StdEncoding.DecodeString(string(opts.InstanceConfig.UserData)); err != nil {
+			userData = base64.StdEncoding.EncodeToString(opts.InstanceConfig.UserData)
+		} else {
+			userData = string(opts.InstanceConfig.UserData)
+		}
+		b["instance_config"].(map[string]interface{})["user_data"] = &userData
+	}
 	log.Printf("[DEBUG] ToConfigurationCreateMap b is: %#v", b)
 	return b, nil
 }
 
 //InstanceConfigOpts is an inner struct of CreateOpts
 type InstanceConfigOpts struct {
-	ID          string                 `json:"instance_id,omitempty"`
-	FlavorRef   string                 `json:"flavorRef,omitempty"`
-	ImageRef    string                 `json:"imageRef,omitempty"`
-	Disk        []DiskOpts             `json:"disk,omitempty"`
-	SSHKey      string                 `json:"key_name,omitempty"`
-	Personality []PersonalityOpts      `json:"personality,omitempty"`
-	PubicIp     PublicIpOpts           `json:"-"`
-	UserData    string                 `json:"user_data,omitempty"`
-	Metadata    map[string]interface{} `json:"metadata,omitempty"` //TODO not sure the type
+	ID          string            `json:"instance_id,omitempty"`
+	FlavorRef   string            `json:"flavorRef,omitempty"`
+	ImageRef    string            `json:"imageRef,omitempty"`
+	Disk        []DiskOpts        `json:"disk,omitempty"`
+	SSHKey      string            `json:"key_name,omitempty"`
+	Personality []PersonalityOpts `json:"personality,omitempty"`
+	PubicIp     PublicIpOpts      `json:"-"`
+	// UserData contains configuration information or scripts to use upon launch.
+	// Create will base64-encode it for you, if it isn't already.
+	UserData []byte                 `json:"-"`
+	Metadata map[string]interface{} `json:"metadata,omitempty"` //TODO not sure the type
 }
 
 //DiskOpts is an inner struct of InstanceConfigOpts
