@@ -87,7 +87,7 @@ type PublicIpOpts struct {
 
 type EipOpts struct {
 	IpType    string
-	Bandwidth BandwidthOpts
+	Bandwidth BandwidthOpts `json:"-"`
 }
 
 type BandwidthOpts struct {
