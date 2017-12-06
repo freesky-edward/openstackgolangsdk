@@ -52,6 +52,40 @@ func Create(client *gophercloud.ServiceClient, opts CreateOptsBuilder) (r Create
 	return
 }
 
+//UpdateOptsBuilder is an interface which can build the map paramter of update function
+type UpdateOptsBuilder interface {
+	ToPolicyUpdateMap() (map[string]interface{}, error)
+}
+
+//UpdateOpts is a struct which represents the parameters of update function
+type UpdateOpts struct {
+	Name           string             `json:"scaling_policy_name,omitempty"`
+	Type           string             `json:"scaling_policy_type,omitempty"`
+	AlarmID        string             `json:"alarm_id,omitempty"`
+	SchedulePolicy SchedulePolicyOpts `json:"scheduled_policy,omitempty"`
+	Action         ActionOpts         `json:"scaling_policy_action,omitempty"`
+	CoolDownTime   int                `json:"cool_down_time,omitempty"`
+}
+
+func (opts UpdateOpts) ToPolicyUpdateMap() (map[string]interface{}, error) {
+	return gophercloud.BuildRequestBody(opts, "")
+}
+
+//Update is a method which can be able to update the policy via accessing to the
+//autoscaling service with Put method and parameters
+func Update(client *gophercloud.ServiceClient, id string, opts UpdateOptsBuilder) (r UpdateResult) {
+	body, err := opts.ToPolicyUpdateMap()
+	if err != nil {
+		r.Err = err
+		return
+	}
+
+	_, r.Err = client.Put(updateURL(client, id), body, &r.Body, &gophercloud.RequestOpts{
+		OkCodes: []int{200},
+	})
+	return
+}
+
 //Delete is a method which can be able to access to delete a policy of autoscaling
 func Delete(client *gophercloud.ServiceClient, id string) (r DeleteResult) {
 	_, r.Err = client.Delete(deleteURL(client, id), nil)

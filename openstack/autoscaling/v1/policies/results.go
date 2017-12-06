@@ -59,3 +59,17 @@ func (r GetResult) Extract() (Policy, error) {
 	err := r.Result.ExtractIntoStructPtr(&p, "scaling_policy")
 	return p, err
 }
+
+//UpdateResult is a struct from which can get the result of udpate method
+type UpdateResult struct {
+	gophercloud.Result
+}
+
+//Extract will deserialize the result to group id with string
+func (r UpdateResult) Extract() (string, error) {
+	var a struct {
+		ID string `json:"scaling_policy_id"`
+	}
+	err := r.Result.ExtractInto(&a)
+	return a.ID, err
+}

@@ -20,3 +20,7 @@ func deleteURL(client *gophercloud.ServiceClient, id string) string {
 func getURL(client *gophercloud.ServiceClient, id string) string {
 	return client.ServiceURL("scaling_policy", id)
 }
+
+func updateURL(c *gophercloud.ServiceClient, id string) string {
+	return c.ServiceURL("scaling_policy", id)
+}
