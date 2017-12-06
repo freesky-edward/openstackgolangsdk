@@ -56,6 +56,6 @@ type GetResult struct {
 
 func (r GetResult) Extract() (Policy, error) {
 	var p Policy
-	err := r.Result.ExtractIntoSlicePtr(&p, "scaling_policy")
+	err := r.Result.ExtractIntoStructPtr(&p, "scaling_policy")
 	return p, err
 }
