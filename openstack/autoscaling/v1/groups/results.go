@@ -30,10 +30,10 @@ type GetResult struct {
 }
 
 //Extract method will parse the result body into Group struct
-func (r GetResult) Extract() (*Group, error) {
-	var a Group
-	err := r.Result.ExtractInto(&a)
-	return &a, err
+func (r GetResult) Extract() (Group, error) {
+	var g Group
+	err := r.Result.ExtractIntoStructPtr(&g, "scaling_group")
+	return g, err
 }
 
 //Group represents the struct of one autoscaling group
